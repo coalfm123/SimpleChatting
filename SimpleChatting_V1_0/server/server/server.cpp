@@ -132,6 +132,7 @@ int main(int argc, char *argv[]) {
 
 	addrlen = sizeof(cSocket.clientaddr);
 	while (1) {
+		gotoxy(1, 500);
 		printf("Wating Client...");
 		//accept()
 
@@ -139,7 +140,7 @@ int main(int argc, char *argv[]) {
 		if (cSocket.client_sock == INVALID_SOCKET) {
 			err_display("accept()");
 		}
-
+		gotoxy(1, 500);
 		printf("\n[TCP SERVER] Client connection : IP Addr = %s, PORT No. : %d ",
 			   inet_ntoa(cSocket.clientaddr.sin_addr), ntohs(cSocket.clientaddr.sin_port));
 
