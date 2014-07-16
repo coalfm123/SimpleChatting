@@ -109,6 +109,8 @@ int main(int argc, char *argv[]) {
 		err_quit("connect()");
 	}
 
+	gotoxy(1, 500);
+	printf("접속되었습니다.");
 	DWORD threadId1[2];
 
 	HANDLE rcvThread = CreateThread(NULL, 0, receive_data, NULL, 0, &threadId1[0]);
