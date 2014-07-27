@@ -49,6 +49,7 @@ DWORD WINAPI receive_data(LPVOID arg) {
 
 	while (1) {
 		if (rflag == 1) return 0;
+
 		retval = recv(sock, buf, BUFSIZE, 0);
 		if (retval == SOCKET_ERROR) {
 			err_display("recv()");
@@ -76,7 +77,7 @@ DWORD WINAPI send_data(LPVOID arg) {
 		if (strcmp(buf, ":exit\n") == 0) {
 			retval = send(sock, buf, BUFSIZE, 0);
 			rflag = 1;
-			break;
+			return 0;
 		}
 		retval = send(sock, buf, BUFSIZE, 0);
 		if (retval == SOCKET_ERROR) err_display("send()");
@@ -109,6 +110,8 @@ int main(int argc, char *argv[]) {
 		err_quit("connect()");
 	}
 
+	gotoxy(1, 500);
+	printf("접속되었습니다.");
 	DWORD threadId1[2];
 
 	HANDLE rcvThread = CreateThread(NULL, 0, receive_data, NULL, 0, &threadId1[0]);
@@ -116,9 +119,18 @@ int main(int argc, char *argv[]) {
 
 
 	while (1) {
+
 		if (rflag == 1)
 			break;
 	}
+
+	DWORD exitCode;
+
+	GetExitCodeThread(rcvThread, &exitCode);
+	if (exitCode == STILL_ACTIVE) printf("실행중인 쓰레드 : rcvTread\n");
+	GetExitCodeThread(sendThread, &exitCode);
+	if (exitCode == STILL_ACTIVE) printf("실행중인 쓰레드 : sencTread\n");
+
 	closesocket(sock);
 	WSACleanup();
 	return 0;
